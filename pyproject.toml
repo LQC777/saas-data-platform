@@ -1,0 +1,24 @@
+[project]
+name = "saas-data-platform"
+version = "0.1.0"
+description = "Multi-tenant data pipeline using PySpark and Delta Lake"
+requires-python = ">=3.11"
+
+dependencies = [
+    "pyspark==3.5.4",
+    "delta-spark==3.2.0",
+    "omegaconf==2.3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "ruff==0.16.4",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
