@@ -1,0 +1,19 @@
+paths:
+  raw: data/raw
+  bronze: data/bronze
+  silver: data/silver
+  gold: data/gold
+  quarantine_root: data
+  quality_logs: data/shared/quality_logs
+
+execution:
+  start_date: null
+  end_date: null
+  tenant: all
+  fail_fast: false
+
+quality:
+  fail_on_critical: false
+
+spark:
+  app_name: saas-data-platform

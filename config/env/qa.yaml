@@ -1,0 +1,7 @@
+environment: qa
+
+paths:
+  raw: data_qa/raw
+  bronze: data_qa/bronze
+  silver: data_qa/silver
+  gold: data_qa/gold

@@ -1,0 +1,7 @@
+environment: main
+
+paths:
+  raw: data_main/raw
+  bronze: data_main/bronze
+  silver: data_main/silver
+  gold: data_main/gold

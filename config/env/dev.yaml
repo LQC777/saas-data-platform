@@ -1,0 +1,7 @@
+environment: dev
+
+paths:
+  raw: data/raw
+  bronze: data/bronze
+  silver: data/silver
+  gold: data/gold
