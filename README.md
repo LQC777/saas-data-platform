@@ -1,5 +1,7 @@
 # SAAS Data Platform
 
+Solución técnica orientada a una arquitectura de datos multi-tenant reproducible y mantenible.
+
 Pipeline de datos multi-tenant desarrollado con PySpark, Delta Lake y OmegaConf para procesar información de entregas de productos utilizando una arquitectura Medallion.
 
 La solución soporta los tenants:
