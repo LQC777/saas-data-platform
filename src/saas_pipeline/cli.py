@@ -6,9 +6,18 @@ from src.saas_pipeline.bronze import (
     create_spark_session,
     run_bronze,
 )
-from src.saas_pipeline.config import load_config
-from src.saas_pipeline.gold import run_gold
-from src.saas_pipeline.silver import run_silver
+from src.saas_pipeline.config import (
+    load_config,
+)
+from src.saas_pipeline.gold import (
+    run_gold,
+)
+from src.saas_pipeline.quality import (
+    run_quality_checks,
+)
+from src.saas_pipeline.silver import (
+    run_silver,
+)
 
 
 TENANTS = [
@@ -23,7 +32,9 @@ TENANTS = [
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="SAAS multi-tenant data pipeline"
+        description=(
+            "SAAS multi-tenant data pipeline"
+        )
     )
 
     parser.add_argument(
@@ -58,13 +69,19 @@ def parse_args():
     parser.add_argument(
         "--start-date",
         required=False,
-        help="Start date in YYYY-MM-DD format",
+        help=(
+            "Start date in "
+            "YYYY-MM-DD format"
+        ),
     )
 
     parser.add_argument(
         "--end-date",
         required=False,
-        help="End date in YYYY-MM-DD format",
+        help=(
+            "End date in "
+            "YYYY-MM-DD format"
+        ),
     )
 
     return parser.parse_args()
@@ -131,32 +148,46 @@ def run_tenant_pipeline(
         "========================================"
     )
 
-    print("\n=== CONFIGURATION ===")
     print(
-        OmegaConf.to_yaml(config)
+        "\n=== CONFIGURATION ==="
     )
 
-    print("\n=== BRONZE ===")
+    print(
+        OmegaConf.to_yaml(
+            config
+        )
+    )
+
+    print(
+        "\n=== BRONZE ==="
+    )
 
     run_bronze(
         spark,
         config,
     )
 
-    print("\n=== SILVER ===")
+    print(
+        "\n=== SILVER ==="
+    )
 
     run_silver(
         spark,
         config,
     )
 
-    # ---------------------------------------------------------
-    # QUALITY will be executed here.
-    #
-    # It must run after Silver and before Gold.
-    # ---------------------------------------------------------
+    print(
+        "\n=== QUALITY ==="
+    )
 
-    print("\n=== GOLD ===")
+    run_quality_checks(
+        spark,
+        config,
+    )
+
+    print(
+        "\n=== GOLD ==="
+    )
 
     run_gold(
         spark,
@@ -173,7 +204,9 @@ def main():
         else [args.tenant]
     )
 
-    spark = create_spark_session()
+    spark = (
+        create_spark_session()
+    )
 
     failures = []
 
@@ -183,8 +216,12 @@ def main():
                 config = build_config(
                     env=args.env,
                     tenant=tenant,
-                    start_date=args.start_date,
-                    end_date=args.end_date,
+                    start_date=(
+                        args.start_date
+                    ),
+                    end_date=(
+                        args.end_date
+                    ),
                 )
 
                 run_tenant_pipeline(
@@ -194,8 +231,10 @@ def main():
 
             except Exception as exc:
                 print(
-                    f"\nERROR processing tenant "
-                    f"{tenant.upper()}: {exc}"
+                    f"\nERROR processing "
+                    f"tenant "
+                    f"{tenant.upper()}: "
+                    f"{exc}"
                 )
 
                 failures.append(
@@ -205,12 +244,12 @@ def main():
                     )
                 )
 
-                # Load tenant configuration to determine
-                # fail_fast behavior.
                 try:
-                    tenant_config = load_config(
-                        env=args.env,
-                        tenant=tenant,
+                    tenant_config = (
+                        load_config(
+                            env=args.env,
+                            tenant=tenant,
+                        )
                     )
 
                     fail_fast = bool(
@@ -228,17 +267,14 @@ def main():
     finally:
         spark.stop()
 
-    # ---------------------------------------------------------
-    # Report failures after processing all tenants
-    # when fail_fast = false
-    # ---------------------------------------------------------
-
     if failures:
         print(
-            "\n========================================"
+            "\n"
+            "========================================"
         )
         print(
-            "PIPELINE COMPLETED WITH FAILURES"
+            "PIPELINE COMPLETED "
+            "WITH FAILURES"
         )
         print(
             "========================================"
@@ -251,14 +287,17 @@ def main():
             )
 
         raise RuntimeError(
-            f"{len(failures)} tenant(s) failed"
+            f"{len(failures)} "
+            "tenant(s) failed"
         )
 
     print(
-        "\n========================================"
+        "\n"
+        "========================================"
     )
     print(
-        "PIPELINE COMPLETED SUCCESSFULLY"
+        "PIPELINE COMPLETED "
+        "SUCCESSFULLY"
     )
     print(
         "========================================"
