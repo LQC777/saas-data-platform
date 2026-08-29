@@ -21,8 +21,7 @@ def create_spark_session():
     return configure_spark_with_delta_pip(builder).getOrCreate()
 
 
-def run_bronze(config):
-    spark = create_spark_session()
+def run_bronze(spark, config):    
 
     tenant = config.tenant.code.lower()
 
@@ -195,5 +194,3 @@ def run_bronze(config):
         f"Materials catalog written to: "
         f"{catalog_output_path}"
     )
-
-    spark.stop()

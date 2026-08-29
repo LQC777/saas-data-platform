@@ -2,8 +2,12 @@ import argparse
 
 from omegaconf import OmegaConf
 
-from src.saas_pipeline.bronze import run_bronze
+from src.saas_pipeline.bronze import (
+    create_spark_session,
+    run_bronze,
+)
 from src.saas_pipeline.config import load_config
+from src.saas_pipeline.silver import run_silver
 
 
 def parse_args():
@@ -47,14 +51,24 @@ def main():
         tenant=args.tenant,
     )
 
-    cli_config = OmegaConf.create(
-        {
-            "execution": {
-                "tenant": args.tenant,
-                "start_date": args.start_date,
-                "end_date": args.end_date,
-            }
+    cli_overrides = {
+        "execution": {
+            "tenant": args.tenant,
         }
+    }
+
+    if args.start_date:
+        cli_overrides["execution"][
+            "start_date"
+        ] = args.start_date
+
+    if args.end_date:
+        cli_overrides["execution"][
+            "end_date"
+        ] = args.end_date
+
+    cli_config = OmegaConf.create(
+        cli_overrides
     )
 
     config = OmegaConf.merge(
@@ -64,7 +78,23 @@ def main():
 
     print(OmegaConf.to_yaml(config))
 
-    run_bronze(config)
+    spark = create_spark_session()
+
+    try:
+        print("\n=== BRONZE ===")
+        run_bronze(
+            spark,
+            config,
+        )
+
+        print("\n=== SILVER ===")
+        run_silver(
+            spark,
+            config,
+        )
+
+    finally:
+        spark.stop()
 
 
 if __name__ == "__main__":
