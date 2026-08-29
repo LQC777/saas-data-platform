@@ -2,7 +2,6 @@ from pathlib import Path
 
 from omegaconf import DictConfig, OmegaConf
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_ROOT = PROJECT_ROOT / "config"
 

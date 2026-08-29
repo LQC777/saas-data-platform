@@ -19,7 +19,6 @@ from src.saas_pipeline.silver import (
     run_silver,
 )
 
-
 TENANTS = [
     "sv",
     "hn",
@@ -244,22 +243,9 @@ def main():
                     )
                 )
 
-                try:
-                    tenant_config = (
-                        load_config(
-                            env=args.env,
-                            tenant=tenant,
-                        )
-                    )
-
-                    fail_fast = bool(
-                        tenant_config
-                        .execution
-                        .fail_fast
-                    )
-
-                except Exception:
-                    fail_fast = False
+                fail_fast = bool(
+                    config.execution.fail_fast
+                )
 
                 if fail_fast:
                     raise

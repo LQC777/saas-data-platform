@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import uuid4
 
 from pyspark.sql import Row
@@ -11,7 +11,6 @@ from pyspark.sql.types import (
     StructType,
     TimestampType,
 )
-
 
 QUALITY_LOG_SCHEMA = StructType(
     [
@@ -95,7 +94,7 @@ def run_quality_checks(spark, config):
 
     run_id = str(uuid4())
 
-    executed_at = datetime.now()
+    executed_at = datetime.now(UTC)
 
     # ---------------------------------------------------------
     # Check 1:

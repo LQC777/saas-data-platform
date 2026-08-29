@@ -1,7 +1,6 @@
 from delta.tables import DeltaTable
 from pyspark.sql import functions as F
 
-
 VALID_DELIVERY_TYPES = ["ZPRE", "ZVE1", "Z04", "Z05"]
 
 
