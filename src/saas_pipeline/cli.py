@@ -2,6 +2,7 @@ import argparse
 
 from omegaconf import OmegaConf
 
+from src.saas_pipeline.bronze import run_bronze
 from src.saas_pipeline.config import load_config
 
 
@@ -56,9 +57,14 @@ def main():
         }
     )
 
-    config = OmegaConf.merge(config, cli_config)
+    config = OmegaConf.merge(
+        config,
+        cli_config,
+    )
 
     print(OmegaConf.to_yaml(config))
+
+    run_bronze(config)
 
 
 if __name__ == "__main__":
